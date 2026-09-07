@@ -42,7 +42,6 @@
           "description": "Full-stack developer who builds production web applications end to end with Laravel and Vue, from REST API to interface.",
           "url": "https://mhdali0001.github.io/me/",
           "image": "https://mhdali0001.github.io/me/my%20photo.JPG",
-          "email": "mailto:mhd.ali.hos2025@gmail.com",
           "sameAs": ["https://github.com/mhdali0001"],
           "knowsAbout": [
             "Laravel", "Vue.js", "PHP", "JavaScript", "TypeScript", "Inertia.js",
@@ -635,14 +634,8 @@
            ========================================================================= */
         .contact-direct { max-width: 560px; }
         .contact-direct h2 { margin-bottom: 0.75rem; }
-        .contact-direct .section__lead { margin-top: 0; margin-bottom: 0.5rem; }
-        .contact-email {
-            font-family: var(--font-display);
-            font-size: clamp(1.15rem, 1rem + 1vw, 1.5rem);
-            font-weight: 600;
-            letter-spacing: -0.01em;
-        }
-        .contact-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.4rem 0 1.1rem; }
+        .contact-direct .section__lead { margin-top: 0; }
+        .contact-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.5rem 0 1.1rem; }
         .contact-github { display: inline-flex; align-items: center; gap: 0.5rem; }
         .contact-github .icon { width: 18px; height: 18px; }
 
@@ -881,14 +874,11 @@
                 <div class="contact-direct reveal">
                     <h2>Get in touch</h2>
                     <p class="section__lead">The fastest way to reach me is email. I usually reply within a day.</p>
-                    <p class="contact-email">
-                        <a class="link" href="mailto:mhd.ali.hos2025@gmail.com">mhd.ali.hos2025@gmail.com</a>
-                    </p>
                     <div class="contact-actions">
-                        <a class="btn btn--primary" href="mailto:mhd.ali.hos2025@gmail.com">
+                        <button class="btn btn--primary" type="button" id="email-me">
                             <svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg>
                             Email me
-                        </a>
+                        </button>
                         <button class="btn btn--ghost" type="button" id="copy-email">
                             <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg>
                             <span class="btn__label">Copy email</span>
@@ -1147,10 +1137,18 @@
                 if (e.matches) setMenu(false);
             });
 
-            /* ---- copy email ---- */
-            var copyBtn = document.getElementById('copy-email');
+            /* ---- email actions (address assembled at runtime, kept out of the static HTML) ---- */
             var copyStatus = document.getElementById('copy-status');
-            var EMAIL = 'mhd.ali.hos2025@gmail.com';
+            function getEmail() { return ['mhd.ali.hos2025', 'gmail.com'].join('@'); }
+
+            var emailMeBtn = document.getElementById('email-me');
+            if (emailMeBtn) {
+                emailMeBtn.addEventListener('click', function () {
+                    window.location.href = 'mailto:' + getEmail();
+                });
+            }
+
+            var copyBtn = document.getElementById('copy-email');
             if (copyBtn) {
                 copyBtn.addEventListener('click', function () {
                     var label = copyBtn.querySelector('.btn__label');
@@ -1160,11 +1158,11 @@
                         setTimeout(function () { label.textContent = 'Copy email'; }, 2200);
                     };
                     if (navigator.clipboard && navigator.clipboard.writeText) {
-                        navigator.clipboard.writeText(EMAIL).then(done).catch(function () {
-                            copyStatus.textContent = 'Could not copy. Email: ' + EMAIL;
+                        navigator.clipboard.writeText(getEmail()).then(done).catch(function () {
+                            copyStatus.textContent = 'Could not copy automatically. Use the Email me button instead.';
                         });
                     } else {
-                        copyStatus.textContent = 'Email: ' + EMAIL;
+                        window.location.href = 'mailto:' + getEmail();
                     }
                 });
             }
